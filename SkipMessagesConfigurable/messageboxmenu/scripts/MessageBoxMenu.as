@@ -101,7 +101,7 @@ package
             this.debug_tf.setTextFormat(tff);
             this.debug_tf.width = 400;
             this.debug_tf.height = 200;
-            this.debug_tf.y = 115;
+            this.debug_tf.y = 100;
             this.debug_tf.wordWrap = true;
             this.debug_tf.multiline = true;
             this.debug_tf.selectable = false;
