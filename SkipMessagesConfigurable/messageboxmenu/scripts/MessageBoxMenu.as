@@ -93,6 +93,10 @@ package
       
       private function log(str:String) : void
       {
+         if(!this.config || !this.config.debug)
+         {
+            return;
+         }
          if(this.debug_tf == null)
          {
             this.debug_tf = new TextField();
@@ -106,17 +110,21 @@ package
             this.debug_tf.multiline = true;
             this.debug_tf.selectable = false;
             this.debug_tf.mouseEnabled = false;
-            this.debug_tf.text = "[" + getTimer() + "] " + str;
             addChild(this.debug_tf);
+         }
+         if(this.config.dt)
+         {
+            this.debug_tf.text += "\n[" + getTimer() + "] " + str;
          }
          else
          {
-            this.debug_tf.text += "\n[" + getTimer() + "] " + str;
+            this.debug_tf.text += "\n" + str;
          }
       }
       
       private function onConfigLoadError(param1:Event) : void
       {
+         this.config = {"debug":true};
          this.log("Config error: " + param1);
       }
       
@@ -125,10 +133,7 @@ package
          this.config = new JSONDecoder(param1.target.data,true).getValue();
          this.config.SkipDelay = this.config.SkipDelay == null || isNaN(this.config.SkipDelay) ? 25 : int(this.config.SkipDelay);
          var configLoadTime:int = getTimer() - this.initTime;
-         if(this.config.debug)
-         {
-            this.log("Config loaded (" + configLoadTime + "ms)");
-         }
+         this.log("Config loaded (" + configLoadTime + "ms)");
          if(this.config.SkipDelay > configLoadTime)
          {
             configLoadTime = this.config.SkipDelay - configLoadTime;
@@ -143,10 +148,9 @@ package
       private function Process() : void
       {
          var dummy:TextField = new TextField();
-         if(this.config.AutoUseRepairKit)
+         if(this.headerText == "$RepairKitChoose")
          {
-            GlobalFunc.SetText(dummy,"$RepairKitChoose");
-            if(this.bodyText == dummy.text)
+            if(this.config.AutoUseRepairKit)
             {
                GlobalFunc.SetText(dummy,"$RepairKitOption");
                var NoKitsRegex:RegExp = new RegExp(dummy.text.replace("{1}",".*").replace("{2}","0").replace("(","\\(").replace(")","\\)"));
@@ -155,10 +159,7 @@ package
                {
                   if(!NoKitsRegex.test(buttonArray[i].text))
                   {
-                     if(this.config.debug)
-                     {
-                        this.log("Repair Kit: " + (i == 0 ? "Basic" : "Improved"));
-                     }
+                     this.log("Repair Kit: " + (i == 0 ? "Basic" : "Improved"));
                      if(!this.config.testRun)
                      {
                         BGSExternalInterface.call(BGSCodeObj,"onButtonPress",buttonArray[i].buttonIndex);
@@ -167,10 +168,7 @@ package
                   }
                   i--;
                }
-               if(this.config.debug)
-               {
-                  this.log("Repair Kit: Cancel");
-               }
+               this.log("Repair Kit: Cancel");
                if(!this.config.testRun)
                {
                   BGSExternalInterface.call(BGSCodeObj,"onButtonPress",buttonArray[buttonArray.length - 1].buttonIndex);
@@ -178,15 +176,11 @@ package
                return;
             }
          }
-         if(this.config.ConfirmLegendaryItems)
+         else if(this.headerText == "$ConfirmLegendaryItemHeader")
          {
-            GlobalFunc.SetText(dummy,"$ConfirmLegendaryItemHeader");
-            if(this.bodyText == dummy.text)
+            if(this.config.ScrapLegendary)
             {
-               if(this.config.debug)
-               {
-                  this.log("Legendary Item");
-               }
+               this.log("Legendary Item");
                if(!this.config.testRun)
                {
                   BGSExternalInterface.call(BGSCodeObj,"onButtonPress",1);
@@ -194,15 +188,11 @@ package
                return;
             }
          }
-         if(this.config.ConfirmPremiumItems)
+         else if(this.headerText == "$ConfirmPremiumItemHeader")
          {
-            GlobalFunc.SetText(dummy,"$ConfirmPremiumItemHeader");
-            if(this.bodyText == dummy.text)
+            if(this.config.ScrapPremium)
             {
-               if(this.config.debug)
-               {
-                  this.log("Premium Item");
-               }
+               this.log("Premium Item");
                if(!this.config.testRun)
                {
                   BGSExternalInterface.call(BGSCodeObj,"onButtonPress",1);
@@ -210,22 +200,19 @@ package
                return;
             }
          }
-         if(this.config.AdditionalSkipOptions)
+         if(this.config.SkipCustom)
          {
-            for(o in this.config.AdditionalSkipOptions)
+            for(o in this.config.SkipCustom)
             {
                GlobalFunc.SetText(dummy,o);
                if(this.bodyText == dummy.text)
                {
-                  if(this.config.debug)
-                  {
-                     this.log("Found in config:");
-                     this.log("\"" + o + "\"");
-                     this.log("Button " + this.config.AdditionalSkipOptions[o] + " : " + (buttonArray.length > this.config.AdditionalSkipOptions[o] ? buttonArray[this.config.AdditionalSkipOptions[o]].text : "null"));
-                  }
+                  this.log("Found in config:");
+                  this.log("\"" + o + "\"");
+                  this.log("Activate button " + this.config.SkipCustom[o] + " : " + (buttonArray.length > this.config.SkipCustom[o] ? buttonArray[this.config.SkipCustom[o]].text : "null"));
                   if(!this.config.testRun)
                   {
-                     BGSExternalInterface.call(BGSCodeObj,"onButtonPress",int(this.config.AdditionalSkipOptions[o]));
+                     BGSExternalInterface.call(BGSCodeObj,"onButtonPress",int(this.config.SkipCustom[o]));
                   }
                   return;
                }
