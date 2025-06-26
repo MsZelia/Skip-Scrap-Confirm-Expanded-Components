@@ -60,6 +60,7 @@ package
       
       public function MessageBoxMenu()
       {
+         this.config = {"debug":true};
          super();
          this.BGSCodeObj = new Object();
          Shared.AS3.StyleSheet.apply(this.List_mc,false,MessageBoxButtonListStyle);
@@ -88,6 +89,7 @@ package
          }
          catch(e:*)
          {
+            this.log("Error loading config " + e);
          }
       }
       
@@ -124,24 +126,31 @@ package
       
       private function onConfigLoadError(param1:Event) : void
       {
-         this.config = {"debug":true};
          this.log("Config error: " + param1);
       }
       
       private function onConfigLoaded(param1:Event) : void
       {
-         this.config = new JSONDecoder(param1.target.data,true).getValue();
-         this.config.SkipDelay = this.config.SkipDelay == null || isNaN(this.config.SkipDelay) ? 25 : int(this.config.SkipDelay);
-         var configLoadTime:int = getTimer() - this.initTime;
-         this.log("Config loaded (" + configLoadTime + "ms)");
-         if(this.config.SkipDelay > configLoadTime)
+         var configLoadTime:int;
+         try
          {
-            configLoadTime = this.config.SkipDelay - configLoadTime;
-            setTimeout(Process,configLoadTime);
+            this.config = new JSONDecoder(param1.target.data,true).getValue();
+            this.config.SkipDelay = this.config.SkipDelay == null || isNaN(this.config.SkipDelay) ? 25 : int(this.config.SkipDelay);
+            configLoadTime = getTimer() - this.initTime;
+            this.log("Config loaded (" + configLoadTime + "ms)");
+            if(this.config.SkipDelay > configLoadTime)
+            {
+               configLoadTime = this.config.SkipDelay - configLoadTime;
+               setTimeout(Process,configLoadTime);
+            }
+            else
+            {
+               Process();
+            }
          }
-         else
+         catch(e:*)
          {
-            Process();
+            this.log("Error parsing config " + e);
          }
       }
       
