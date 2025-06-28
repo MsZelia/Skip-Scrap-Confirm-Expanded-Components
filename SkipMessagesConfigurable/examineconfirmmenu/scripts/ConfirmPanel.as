@@ -140,7 +140,7 @@ package
             this.debug_tf.setTextFormat(tff);
             this.debug_tf.width = 400;
             this.debug_tf.height = 200;
-            this.debug_tf.y = 100;
+            this.debug_tf.y = 30;
             this.debug_tf.wordWrap = true;
             this.debug_tf.multiline = true;
             this.debug_tf.selectable = false;
@@ -214,15 +214,31 @@ package
          var dummy:TextField = new TextField();
          if(this.headerText == "$SCRAPTHISITEM")
          {
-            if(this.config.SkipScrapComponentsView)
+            if(this.config.SkipScrapComponentsView && this.config.SkipScrapComponentsView.Enabled)
             {
-               this.log("Componenets view");
-               if(!this.config.testRun)
+               this.log("Components view");
+               if(this.ConfirmSubtitle_mc.ConfirmSubtitle_tf.text.indexOf("¬") == -1)
                {
-                  this.onAcceptButton();
+                  this.log("Non-legendary item");
+                  if(this.config.SkipScrapComponentsView.NonLegendary && !this.config.testRun)
+                  {
+                     this.onAcceptButton();
+                  }
                }
-               return;
+               else
+               {
+                  this.log("Non-legendary item");
+                  if(this.config.SkipScrapComponentsView.Legendary && !this.config.testRun)
+                  {
+                     this.onAcceptButton();
+                  }
+               }
             }
+            else
+            {
+               this.log("Components view: disabled");
+            }
+            return;
          }
          if(this.config.SkipCustom)
          {
@@ -234,7 +250,7 @@ package
                   var buttonId:int = int(this.config.SkipCustom[o]);
                   this.log("Found in config:");
                   this.log("\"" + o + "\"");
-                  this.log("Activate button " + buttonId + " : " + (buttonArray.length > buttonId ? buttonArray[buttonId].text : "null"));
+                  this.log("Activate button " + buttonId + " : " + (buttonArray.length > buttonId ? buttonArray[buttonId].ButtonText : "null"));
                   if(!this.config.testRun)
                   {
                      buttonFunctions[buttonId].call();
@@ -253,7 +269,7 @@ package
                   buttonId = int(this.config.SkipCustomRegex[o]);
                   this.log("Found regex in config:");
                   this.log("\"" + o + "\"");
-                  this.log("Activate button " + buttonId + " : " + (buttonArray.length > buttonId ? buttonArray[buttonId].text : "null"));
+                  this.log("Activate button " + buttonId + " : " + (buttonArray.length > buttonId ? buttonArray[buttonId].ButtonText : "null"));
                   if(!this.config.testRun)
                   {
                      buttonFunctions[buttonId].call();
@@ -270,7 +286,7 @@ package
             i = 0;
             while(i < buttonArray.length)
             {
-               this.log(buttonArray[i].buttonIndex + " : " + buttonArray[i].text);
+               this.log(i + " : " + buttonArray[i].ButtonText);
                i++;
             }
          }
