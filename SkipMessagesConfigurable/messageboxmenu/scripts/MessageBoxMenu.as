@@ -102,7 +102,7 @@ package
          if(this.debug_tf == null)
          {
             this.debug_tf = new TextField();
-            var tff:TextFormat = new TextFormat("Arial",16,16777215);
+            var tff:TextFormat = new TextFormat("$MAIN_Font",16,16777215);
             this.debug_tf.defaultTextFormat = tff;
             this.debug_tf.setTextFormat(tff);
             this.debug_tf.width = 400;
@@ -216,12 +216,32 @@ package
                GlobalFunc.SetText(dummy,o);
                if(this.bodyText == dummy.text)
                {
+                  var buttonId:int = int(this.config.SkipCustom[o]);
                   this.log("Found in config:");
                   this.log("\"" + o + "\"");
-                  this.log("Activate button " + this.config.SkipCustom[o] + " : " + (buttonArray.length > this.config.SkipCustom[o] ? buttonArray[this.config.SkipCustom[o]].text : "null"));
+                  this.log("Activate button " + buttonId + " : " + (buttonArray.length > buttonId ? buttonArray[buttonId].text : "null"));
                   if(!this.config.testRun)
                   {
-                     BGSExternalInterface.call(BGSCodeObj,"onButtonPress",int(this.config.SkipCustom[o]));
+                     BGSExternalInterface.call(BGSCodeObj,"onButtonPress",buttonId);
+                  }
+                  return;
+               }
+            }
+         }
+         if(this.config.SkipCustomRegex)
+         {
+            for(o in this.config.SkipCustomRegex)
+            {
+               var regex:RegExp = new RegExp(o);
+               if(regex.test(this.bodyText))
+               {
+                  buttonId = int(this.config.SkipCustomRegex[o]);
+                  this.log("Found regex in config:");
+                  this.log("\"" + o + "\"");
+                  this.log("Activate button " + buttonId + " : " + (buttonArray.length > buttonId ? buttonArray[buttonId].text : "null"));
+                  if(!this.config.testRun)
+                  {
+                     BGSExternalInterface.call(BGSCodeObj,"onButtonPress",int(buttonId));
                   }
                   return;
                }
