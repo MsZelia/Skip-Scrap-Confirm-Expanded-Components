@@ -135,7 +135,7 @@ package
          if(this.debug_tf == null)
          {
             this.debug_tf = new TextField();
-            var tff:TextFormat = new TextFormat("Arial",16,16777215);
+            var tff:TextFormat = new TextFormat("$MAIN_Font",16,16777215);
             this.debug_tf.defaultTextFormat = tff;
             this.debug_tf.setTextFormat(tff);
             this.debug_tf.width = 400;
@@ -212,12 +212,13 @@ package
             buttonFunctions.push(this.onAltButton2);
          }
          var dummy:TextField = new TextField();
+         dummy.text = "$LegendaryModGlyph";
          if(this.headerText == "$SCRAPTHISITEM")
          {
             if(this.config.SkipScrapComponentsView && this.config.SkipScrapComponentsView.Enabled)
             {
                this.log("Components view");
-               if(this.ConfirmSubtitle_mc.ConfirmSubtitle_tf.text.indexOf("¬") == -1)
+               if(this.ConfirmSubtitle_mc.ConfirmSubtitle_tf.text.indexOf(dummy.text) == -1)
                {
                   this.log("Non-legendary item");
                   if(this.config.SkipScrapComponentsView.NonLegendary && !this.config.testRun)
@@ -227,7 +228,7 @@ package
                }
                else
                {
-                  this.log("Non-legendary item");
+                  this.log("Legendary item");
                   if(this.config.SkipScrapComponentsView.Legendary && !this.config.testRun)
                   {
                      this.onAcceptButton();
