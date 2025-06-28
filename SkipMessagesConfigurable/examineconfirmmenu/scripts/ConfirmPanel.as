@@ -96,16 +96,6 @@ package
          addEventListener(MouseEvent.MOUSE_WHEEL,this.onMouseWheel,false,0,true);
          this.ScrollUp_mc.addEventListener(MouseEvent.CLICK,this.onUpArrowClick,false,0,true);
          this.ScrollDown_mc.addEventListener(MouseEvent.CLICK,this.onDownArrowClick,false,0,true);
-         if(false)
-         {
-            setTimeout(function():void
-            {
-               if(!AltButton.ButtonVisible && !AltButton2.ButtonVisible)
-               {
-                  onAcceptButton();
-               }
-            },20);
-         }
          this.loadConfig();
       }
       
