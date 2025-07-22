@@ -2,12 +2,16 @@ package
 {
    import Shared.AS3.BGSExternalInterface;
    import Shared.AS3.BSScrollingList;
+   import Shared.AS3.Data.BSUIDataManager;
+   import Shared.AS3.Data.FromClientDataEvent;
    import Shared.AS3.IMenu;
    import Shared.AS3.StyleSheet;
    import Shared.AS3.Styles.MessageBoxButtonListStyle;
    import Shared.GlobalFunc;
+   import Shared.ResolutionDarkeners;
    import com.adobe.serialization.json.*;
    import flash.display.MovieClip;
+   import flash.display.Shape;
    import flash.events.*;
    import flash.filters.*;
    import flash.net.*;
@@ -65,6 +69,7 @@ package
          this.BGSCodeObj = new Object();
          Shared.AS3.StyleSheet.apply(this.List_mc,false,MessageBoxButtonListStyle);
          this.Body_mc.Body_tf.autoSize = TextFieldAutoSize.CENTER;
+         BSUIDataManager.Subscribe("ScreenResolutionData",this.onScreenResolutionData);
          this.List_mc.addEventListener(BSScrollingList.ITEM_PRESS,this.onItemPress);
          this.List_mc.addEventListener(BSScrollingList.PLAY_FOCUS_SOUND,this.playFocusSound);
          this.tooltip_tf.addEventListener(MouseEvent.MOUSE_WHEEL,this.onTooltipMouseWheel);
@@ -258,6 +263,17 @@ package
                this.log(buttonArray[i].buttonIndex + " : " + buttonArray[i].text);
                i++;
             }
+         }
+      }
+      
+      private function onScreenResolutionData(param1:FromClientDataEvent) : void
+      {
+         var _loc2_:Shape = null;
+         if(param1.data)
+         {
+            _loc2_ = ResolutionDarkeners.CreateDarkener(param1.data.ScreenWidth,param1.data.ScreenHeight,ResolutionDarkeners.DARKENER_TYPE_SOLID);
+            this.parent.addChildAt(_loc2_,0);
+            ResolutionDarkeners.PositionDarkener(_loc2_);
          }
       }
       

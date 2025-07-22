@@ -416,22 +416,26 @@ package
          this.ButtonHintBar_mc.redrawUIComponent();
          _loc6_ = Math.max(_loc6_,this.ButtonHintBar_mc.Sizer_mc.width);
          _loc6_ = Math.max(this.MinWidthC,_loc6_ + this.WidthPaddingC);
-         _loc7_ = 0;
-         while(_loc7_ < _loc1_)
-         {
-            (_loc8_ = this.m_Entries[_loc7_]).x = _loc6_ / 2;
-            _loc7_++;
-         }
          this.TopComponentSource = !!_loc1_ ? 0 : -1;
          this.TopComponent = 0;
          this.BGRect_mc.height = Math.min(_loc2_,this.MaxHeightC) + this.YBufferBeforeButtonsC + this.ButtonHintBar_mc.Sizer_mc.height + this.YBufferAfterButtonsC;
          this.ButtonHintBar_mc.y = this.BGRect_mc.height - this.ButtonHintBar_mc.Sizer_mc.height - this.YBufferAfterButtonsC;
          this.x = (loaderInfo.width - _loc6_) / 2;
          this.y = (loaderInfo.height - this.BGRect_mc.height) / 2;
-         this.BGRect_mc.width = _loc6_;
-         this.ConfirmQuestion_mc.x = _loc6_ / 2;
-         this.ButtonHintBar_mc.x = _loc6_ / 2;
          this.ScrollDown_mc.y = this.ButtonHintBar_mc.y - this.YBufferBeforeButtonsC - this.ScrollDown_mc.height;
+         this.BGRect_mc.width = _loc6_;
+         this.ConfirmQuestion_mc.x = _loc6_ / 2 - this.ConfirmQuestion_mc.width / 2;
+         this.ButtonHintBar_mc.x = _loc6_ / 2;
+         if(this.ConfirmSubtitle_mc.visible)
+         {
+            this.ConfirmSubtitle_mc.x = this.BGRect_mc.width / 2 - this.ConfirmSubtitle_mc.width / 2;
+         }
+         _loc7_ = 0;
+         while(_loc7_ < _loc1_)
+         {
+            (_loc8_ = this.m_Entries[_loc7_]).x = _loc6_ / 2 + _loc8_.textField.width - _loc8_.width / 2;
+            _loc7_++;
+         }
          this.UpdateScroll();
       }
       
