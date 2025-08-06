@@ -28,7 +28,6 @@ package
       public static const BODY_SIZE_PAD:Number = 25;
       
       public static var TAG_SCRAPTOSTASH:String = "ScrapToStash";
-       
       
       public var Body_mc:MovieClip;
       
@@ -58,13 +57,12 @@ package
       
       private var debug_tf:TextField;
       
-      private var config:Object;
+      private var config:Object = {"debug":true};
       
       private var headerText:String;
       
       public function MessageBoxMenu()
       {
-         this.config = {"debug":true};
          super();
          this.BGSCodeObj = new Object();
          Shared.AS3.StyleSheet.apply(this.List_mc,false,MessageBoxButtonListStyle);
@@ -467,3 +465,4 @@ package
       }
    }
 }
+

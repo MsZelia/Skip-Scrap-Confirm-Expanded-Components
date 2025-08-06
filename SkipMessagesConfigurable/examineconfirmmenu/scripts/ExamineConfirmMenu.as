@@ -8,7 +8,6 @@ package
    [Embed(source="/_assets/assets.swf", symbol="symbol23")]
    public class ExamineConfirmMenu extends IMenu
    {
-       
       
       public var BGRect_mc:TextField;
       
@@ -55,3 +54,4 @@ package
       }
    }
 }
+

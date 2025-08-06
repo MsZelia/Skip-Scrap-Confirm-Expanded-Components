@@ -7,7 +7,6 @@ package
    {
       
       public static const ENTRY_BORDER_PAD:Number = 30;
-       
       
       private var m_BaseFilters:Array;
       
@@ -42,3 +41,4 @@ package
       }
    }
 }
+

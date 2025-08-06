@@ -34,7 +34,6 @@ package Shared
       private static const FILL_COLOR:* = 0;
       
       private static const ALPHA_VALUE:* = 0.75;
-       
       
       public function ResolutionDarkeners()
       {
@@ -57,17 +56,20 @@ package Shared
                _loc4_.alpha = ALPHA_VALUE;
                break;
             case DARKENER_TYPE_RADIAL:
-               (_loc7_ = new Matrix()).createGradientBox(_loc5_ + _loc5_ * 0.2,_loc6_ + _loc6_ * 0.2,0,0 - _loc5_ * 0.2 / 2,0 - _loc6_ * 0.2 / 2);
+               _loc7_ = new Matrix();
+               _loc7_.createGradientBox(_loc5_ + _loc5_ * 0.2,_loc6_ + _loc6_ * 0.2,0,0 - _loc5_ * 0.2 / 2,0 - _loc6_ * 0.2 / 2);
                _loc4_.graphics.beginGradientFill(GradientType.RADIAL,GRADIENT_COLORS,RADIAL_ALPHAS,RADIAL_RATIOS,_loc7_);
                _loc4_.graphics.drawRect(0,0,_loc5_,_loc6_);
                break;
             case DARKENER_TYPE_LINEAR_LEFT:
-               (_loc8_ = new Matrix()).createGradientBox(_loc5_,_loc6_);
+               _loc8_ = new Matrix();
+               _loc8_.createGradientBox(_loc5_,_loc6_);
                _loc4_.graphics.beginGradientFill(GradientType.LINEAR,GRADIENT_COLORS,LINEAR_LEFT_ALPHAS,LINEAR_RATIOS,_loc8_);
                _loc4_.graphics.drawRect(0,0,_loc5_,_loc6_);
                break;
             case DARKENER_TYPE_LINEAR_RIGHT:
-               (_loc8_ = new Matrix()).createGradientBox(_loc5_,_loc6_);
+               _loc8_ = new Matrix();
+               _loc8_.createGradientBox(_loc5_,_loc6_);
                _loc4_.graphics.beginGradientFill(GradientType.LINEAR,GRADIENT_COLORS,LINEAR_RIGHT_ALPHAS,LINEAR_RATIOS,_loc8_);
                _loc4_.graphics.drawRect(0,0,_loc5_,_loc6_);
          }
@@ -81,3 +83,4 @@ package Shared
       }
    }
 }
+

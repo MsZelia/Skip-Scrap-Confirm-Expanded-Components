@@ -14,7 +14,6 @@ package Shared.AS3.Styles
       public static var verticalSpacing_Inspectable:Number = 7.5;
       
       public static var restoreListIndex_Inspectable:Boolean = false;
-       
       
       public function MessageBoxButtonListStyle()
       {
@@ -22,3 +21,4 @@ package Shared.AS3.Styles
       }
    }
 }
+

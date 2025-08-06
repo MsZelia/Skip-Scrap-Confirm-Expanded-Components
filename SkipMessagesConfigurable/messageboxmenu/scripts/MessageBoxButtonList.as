@@ -5,7 +5,6 @@ package
    [Embed(source="/_assets/assets.swf", symbol="symbol10")]
    public class MessageBoxButtonList extends BSScrollingList
    {
-       
       
       private var m_GreatestWidth:Number = 0;
       
@@ -37,7 +36,8 @@ package
             _loc3_ = GetClipByIndex(_loc1_) as MessageBoxButtonEntry;
             if(Boolean(_loc3_) && Boolean(_loc3_.textField))
             {
-               if((_loc4_ = _loc3_.CalculateBorderWidth()) > this.m_GreatestWidth)
+               _loc4_ = _loc3_.CalculateBorderWidth();
+               if(_loc4_ > this.m_GreatestWidth)
                {
                   this.m_GreatestWidth = _loc4_;
                }
@@ -47,7 +47,8 @@ package
          var _loc2_:uint = 0;
          while(_loc2_ < uiNumListItems)
          {
-            if(_loc5_ = GetClipByIndex(_loc2_) as MessageBoxButtonEntry)
+            _loc5_ = GetClipByIndex(_loc2_) as MessageBoxButtonEntry;
+            if(_loc5_)
             {
                _loc5_.SetBorderWidth(this.m_GreatestWidth);
             }
@@ -77,3 +78,4 @@ package
       }
    }
 }
+

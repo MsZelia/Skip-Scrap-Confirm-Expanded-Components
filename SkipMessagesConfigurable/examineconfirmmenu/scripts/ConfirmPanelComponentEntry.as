@@ -9,7 +9,6 @@ package
    [Embed(source="/_assets/assets.swf", symbol="symbol8")]
    public class ConfirmPanelComponentEntry extends MovieClip
    {
-       
       
       public var textField:TextField;
       
@@ -117,3 +116,4 @@ package
       }
    }
 }
+

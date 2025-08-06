@@ -9,7 +9,6 @@ package
    [Embed(source="/_assets/assets.swf", symbol="symbol2")]
    public class ConfirmPanelComponentSourceEntry extends MovieClip
    {
-       
       
       public var textField:TextField;
       
@@ -115,7 +114,8 @@ package
          }
          if(_loc6_ == null)
          {
-            (_loc6_ = new ConfirmPanelComponentEntry(param1)).x = this.XBufferBeforeComponentsC;
+            _loc6_ = new ConfirmPanelComponentEntry(param1);
+            _loc6_.x = this.XBufferBeforeComponentsC;
             addChild(_loc6_);
             this.EntriesA.push(_loc6_);
          }
@@ -141,7 +141,8 @@ package
          var _loc7_:* = 0;
          while(_loc7_ < _loc6_)
          {
-            if((_loc8_ = this.EntriesA[_loc7_] as ConfirmPanelComponentEntry).y < _loc4_ - 1)
+            _loc8_ = this.EntriesA[_loc7_] as ConfirmPanelComponentEntry;
+            if(_loc8_.y < _loc4_ - 1)
             {
                _loc8_.visible = false;
             }
@@ -173,7 +174,8 @@ package
          var _loc3_:* = 0;
          while(_loc3_ < _loc2_)
          {
-            (_loc4_ = this.EntriesA[_loc3_] as ConfirmPanelComponentEntry).y = _loc1_;
+            _loc4_ = this.EntriesA[_loc3_] as ConfirmPanelComponentEntry;
+            _loc4_.y = _loc1_;
             _loc1_ += _loc4_.height;
             _loc3_++;
          }
@@ -202,3 +204,4 @@ package
       }
    }
 }
+
