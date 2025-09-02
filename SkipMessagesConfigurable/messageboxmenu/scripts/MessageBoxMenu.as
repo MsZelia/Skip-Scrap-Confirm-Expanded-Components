@@ -19,7 +19,7 @@ package
    import flash.utils.*;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol20")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol97")]
    public class MessageBoxMenu extends IMenu
    {
       
@@ -31,13 +31,17 @@ package
       
       public var Body_mc:MovieClip;
       
-      public var tooltip_tf:TextField;
+      public var Tooltip_mc:MovieClip;
       
       public var List_mc:MessageBoxButtonList;
       
       public var BodyScrollUp_mc:MovieClip;
       
       public var BodyScrollDown_mc:MovieClip;
+      
+      private var TooltipList_mc:BSScrollingList;
+      
+      private var Tooltip_tf:TextField;
       
       public var backgroundBoxHeader:MovieClip;
       
@@ -53,6 +57,10 @@ package
       
       private var m_Tag:String = "";
       
+      private var m_ButtonHintsArray:Array;
+      
+      private var m_ActivationListArray:Array;
+      
       private var initTime:int;
       
       private var debug_tf:TextField;
@@ -65,17 +73,21 @@ package
       {
          super();
          this.BGSCodeObj = new Object();
+         this.m_ButtonHintsArray = new Array();
+         this.m_ActivationListArray = new Array();
+         this.Tooltip_tf = this.Tooltip_mc.Tooltip_tf;
+         this.TooltipList_mc = this.Tooltip_mc.TooltipList_mc;
          Shared.AS3.StyleSheet.apply(this.List_mc,false,MessageBoxButtonListStyle);
          this.Body_mc.Body_tf.autoSize = TextFieldAutoSize.CENTER;
          BSUIDataManager.Subscribe("ScreenResolutionData",this.onScreenResolutionData);
+         addEventListener(Event.ENTER_FRAME,this.initDisableInputCounter);
          this.List_mc.addEventListener(BSScrollingList.ITEM_PRESS,this.onItemPress);
          this.List_mc.addEventListener(BSScrollingList.PLAY_FOCUS_SOUND,this.playFocusSound);
-         this.tooltip_tf.addEventListener(MouseEvent.MOUSE_WHEEL,this.onTooltipMouseWheel);
-         addEventListener(Event.ENTER_FRAME,this.initDisableInputCounter);
+         this.Tooltip_mc.Tooltip_tf.addEventListener(MouseEvent.MOUSE_WHEEL,this.onTooltipMouseWheel);
          this.visible = false;
          this.List_mc.disableInput_Inspectable = true;
          this.DisableInputCounter = 0;
-         this.tooltip_tf.scrollV = 0;
+         this.Tooltip_tf.scrollV = 0;
          this.loadConfig();
       }
       
@@ -290,12 +302,32 @@ package
       
       public function get tooltipText() : String
       {
-         return this.tooltip_tf.text;
+         return this.Tooltip_tf.text;
       }
       
       public function set tooltipText(param1:String) : *
       {
-         GlobalFunc.SetText(this.tooltip_tf,param1,true);
+         GlobalFunc.SetText(this.Tooltip_tf,param1,true);
+      }
+      
+      public function get buttonHintsArray() : Array
+      {
+         return this.m_ButtonHintsArray;
+      }
+      
+      public function set buttonHintsArray(param1:Array) : void
+      {
+         this.m_ButtonHintsArray = param1;
+      }
+      
+      public function get activationListArray() : Array
+      {
+         return this.m_ActivationListArray;
+      }
+      
+      public function set activationListArray(param1:Array) : void
+      {
+         this.m_ActivationListArray = param1;
       }
       
       public function get isValidTextScrollMode() : Boolean
@@ -305,9 +337,10 @@ package
       
       public function updateMessageScrollIndicators() : void
       {
-         var _loc1_:Boolean = this.isValidTextScrollMode;
-         this.BodyScrollUp_mc.visible = _loc1_ && this.tooltip_tf.scrollV > 1;
-         this.BodyScrollDown_mc.visible = _loc1_ && this.tooltip_tf.bottomScrollV < this.tooltip_tf.numLines;
+         var _loc1_:Boolean = false;
+         _loc1_ = this.isValidTextScrollMode;
+         this.BodyScrollUp_mc.visible = _loc1_ && this.Tooltip_tf.scrollV > 1;
+         this.BodyScrollDown_mc.visible = _loc1_ && this.Tooltip_tf.bottomScrollV < this.Tooltip_tf.numLines;
       }
       
       public function set tag(param1:String) : void
@@ -322,11 +355,11 @@ package
          {
             if(param1 == 1)
             {
-               --this.tooltip_tf.scrollV;
+               --this.Tooltip_tf.scrollV;
             }
             else if(param1 == 3)
             {
-               ++this.tooltip_tf.scrollV;
+               ++this.Tooltip_tf.scrollV;
             }
             this.updateMessageScrollIndicators();
          }
@@ -334,15 +367,15 @@ package
       
       private function onTooltipMouseWheel(param1:MouseEvent) : *
       {
-         if(this.isValidTextScrollMode && this.tooltip_tf.hitTestPoint(stage.mouseX,stage.mouseY))
+         if(this.isValidTextScrollMode && this.Tooltip_tf.hitTestPoint(stage.mouseX,stage.mouseY))
          {
             if(param1.delta < 0)
             {
-               ++this.tooltip_tf.scrollV;
+               ++this.Tooltip_tf.scrollV;
             }
             else if(param1.delta > 0)
             {
-               --this.tooltip_tf.scrollV;
+               --this.Tooltip_tf.scrollV;
             }
             this.updateMessageScrollIndicators();
          }
@@ -388,21 +421,55 @@ package
          this.Body_mc.x = _loc1_ / 2;
          this.List_mc.x = _loc1_ / 2;
          var _loc3_:Number = 0;
-         _loc3_ = GlobalFunc.getTextfieldSize(this.Body_mc.Body_tf);
+         _loc3_ = Number(this.Body_mc.Body_tf.textHeight);
          _loc2_ += _loc3_ + SPACING_Y_PAD;
          this.backgroundBoxHeader.height = _loc2_;
-         this.tooltip_tf.visible = this.tooltip_tf.length > 0;
-         if(this.tooltip_tf.visible)
+         switch(this.m_Tag)
          {
-            this.tooltip_tf.y = _loc2_;
-            if(this.isValidTextScrollMode)
-            {
-               _loc2_ += Math.min(GlobalFunc.getTextfieldSize(this.tooltip_tf),this.tooltip_tf.height) + SPACING_Y_PAD;
-            }
-            else
-            {
-               _loc2_ += GlobalFunc.getTextfieldSize(this.tooltip_tf) + SPACING_Y_PAD;
-            }
+            case "BUTTONHINTS":
+               this.Tooltip_mc.gotoAndStop("List");
+               this.TooltipList_mc.visible = this.m_ButtonHintsArray.length > 0;
+               ButtonTooltipListEntry.platform = uiPlatform;
+               if(this.TooltipList_mc.visible)
+               {
+                  this.TooltipList_mc.listEntryClass_Inspectable = "ButtonTooltipListEntry";
+                  this.TooltipList_mc.numListItems_Inspectable = 4;
+                  this.TooltipList_mc.SetNumListItems(4);
+                  this.TooltipList_mc.entryList = this.m_ButtonHintsArray;
+                  this.TooltipList_mc.InvalidateData();
+                  this.Tooltip_mc.y = _loc2_;
+                  _loc2_ += this.TooltipList_mc.shownItemsHeight;
+               }
+               break;
+            case "ACTIVATIONLIST":
+               this.Tooltip_mc.gotoAndStop("List");
+               this.TooltipList_mc.visible = this.m_ActivationListArray.length > 0;
+               if(this.TooltipList_mc.visible)
+               {
+                  this.TooltipList_mc.listEntryClass_Inspectable = "ActivationTooltipListEntry";
+                  this.TooltipList_mc.numListItems_Inspectable = 3;
+                  this.TooltipList_mc.SetNumListItems(3);
+                  this.TooltipList_mc.entryList = this.m_ActivationListArray;
+                  this.TooltipList_mc.InvalidateData();
+                  this.Tooltip_mc.y = _loc2_;
+                  _loc2_ += this.TooltipList_mc.shownItemsHeight;
+               }
+               break;
+            default:
+               this.Tooltip_mc.gotoAndStop("Default");
+               this.Tooltip_tf.visible = this.Tooltip_tf.length > 0;
+               if(this.Tooltip_tf.visible)
+               {
+                  this.Tooltip_mc.y = _loc2_;
+                  if(this.isValidTextScrollMode)
+                  {
+                     _loc2_ += Math.min(GlobalFunc.getTextfieldSize(this.Tooltip_tf),this.Tooltip_tf.height) + SPACING_Y_PAD;
+                  }
+                  else
+                  {
+                     _loc2_ += GlobalFunc.getTextfieldSize(this.Tooltip_tf) + SPACING_Y_PAD;
+                  }
+               }
          }
          _loc2_ += SPACING_Y_PAD * 4;
          this.List_mc.y = _loc2_;

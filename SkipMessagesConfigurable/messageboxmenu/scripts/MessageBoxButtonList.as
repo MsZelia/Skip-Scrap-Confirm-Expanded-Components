@@ -2,7 +2,7 @@ package
 {
    import Shared.AS3.BSScrollingList;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol10")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol83")]
    public class MessageBoxButtonList extends BSScrollingList
    {
       
