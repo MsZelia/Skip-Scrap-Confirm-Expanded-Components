@@ -193,13 +193,11 @@ package
          {
             _loc1_ = this.ItemName;
          }
-         trace(this.ComponentDisplayColor);
          if(this.ComponentDisplayColor > 0)
          {
             _loc2_ = this.ComponentDisplayColor.toString(16);
             _loc1_ = "<font color=\"#" + _loc2_ + "\">" + _loc1_ + "</font>";
          }
-         trace(_loc1_);
          GlobalFunc.SetText(this.textField,_loc1_,true);
       }
    }
