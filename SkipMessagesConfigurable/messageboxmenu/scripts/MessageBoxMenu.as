@@ -456,7 +456,7 @@ package
                }
                break;
             default:
-               this.Tooltip_mc.gotoAndStop("Default");
+               this.Tooltip_mc.gotoAndStop("Text");
                this.Tooltip_tf.visible = this.Tooltip_tf.length > 0;
                if(this.Tooltip_tf.visible)
                {
