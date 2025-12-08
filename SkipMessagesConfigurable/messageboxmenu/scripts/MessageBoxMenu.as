@@ -262,6 +262,25 @@ package
                }
             }
          }
+         if(this.config.ChangeSelection)
+         {
+            for(o in this.config.ChangeSelection)
+            {
+               regex = new RegExp(o);
+               if(regex.test(this.bodyText))
+               {
+                  buttonId = int(this.config.ChangeSelection[o]);
+                  this.log("Found regex in config:");
+                  this.log("\"" + o + "\"");
+                  this.log("Select button " + buttonId + " : " + (buttonArray.length > buttonId ? buttonArray[buttonId].text : "null"));
+                  if(!this.config.testRun)
+                  {
+                     List_mc.selectedIndex = buttonId;
+                  }
+                  return;
+               }
+            }
+         }
          if(this.config.debug)
          {
             this.log("Not found in config:");
