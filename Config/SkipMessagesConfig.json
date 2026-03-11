@@ -26,5 +26,11 @@
 		// Few examples:
 		// "Pay [0-9]{1,2} Caps to travel": 0
 		// "Choose a travel point for": 1
+	},
+	
+	"ChangeSelection": {
+		
+		// Example:
+		// "Choose a travel point for Highway Town": 2
 	}
 }
