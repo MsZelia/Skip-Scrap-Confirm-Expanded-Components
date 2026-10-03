@@ -20,8 +20,6 @@ package
       
       private static const LOCKED_REPAIR_FAILURE_MESSAGE:String = "$CannotCraftMaterialsLocked";
       
-      private static const SYMBOLS:RegExp = /[.-']+/g;
-      
       public var ButtonHintBar_mc:BSButtonHintBar;
       
       public var BGRect_mc:MovieClip;
@@ -389,7 +387,7 @@ package
       
       private function normalizeModName(s:String, modStar:RegExp) : String
       {
-         return s.replace(SYMBOLS,"").replace(modStar,"").toLowerCase();
+         return s.replace(/[.\-']+/g,"").replace(modStar,"").toLowerCase();
       }
       
       private function parseMods(entry:ConfirmPanelComponentSourceEntry, modStar:RegExp) : Vector.<String>
