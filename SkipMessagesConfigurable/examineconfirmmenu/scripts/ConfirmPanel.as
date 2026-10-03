@@ -19,7 +19,8 @@ package
    {
       
       private static const LOCKED_REPAIR_FAILURE_MESSAGE:String = "$CannotCraftMaterialsLocked";
-      private static const SYMBOLS:RegExp = /[.'-]+/g;
+      
+      private static const SYMBOLS:RegExp = /[.-']+/g;
       
       public var ButtonHintBar_mc:BSButtonHintBar;
       
@@ -231,15 +232,11 @@ package
                   }
                   return;
                }
-
-               // At this point we're dealing with a legendary item.
                this.log("Legendary item");
-               // No-op. To slightly cleanup branch nesting and conditionals.
                if(!componentsCfg.Legendary)
                {
                   return;
                }
-
                var legCfg:Object = componentsCfg.Legendaries;
                if(legCfg == null)
                {
@@ -249,13 +246,11 @@ package
                   }
                   return;
                }
-
                if(legCfg.DontSkipNamedItems && isUnique)
                {
-                  this.log("Don't skip: Named legendary item");
+                  this.log("Don\'t skip: Named legendary item");
                   return;
                }
-
                var chanceToGet:TextField = new TextField();
                chanceToGet.text = "$ChanceToGet";
                var chanceToLearn:TextField = new TextField();
@@ -267,11 +262,11 @@ package
                {
                   if(e.itemName == chanceToGet.text)
                   {
-                     mods = parseMods(e, modStars);
+                     mods = parseMods(e,modStars);
                   }
                   if(e.itemName == chanceToLearn.text)
                   {
-                     learnable = parseMods(e, modStars);
+                     learnable = parseMods(e,modStars);
                   }
                }
                this.log("Num Stars: " + numStars + ", Unique: " + isUnique);
@@ -280,24 +275,22 @@ package
                {
                   this.log("Learnable: " + learnable.join(", "));
                }
-
                if(legCfg.Checklist)
                {
                   var checklist:Dictionary = new Dictionary();
                   for each(var n in legCfg.Checklist)
                   {
-                     checklist[normalizeModName(n, modStars)] = true;
+                     checklist[normalizeModName(n,modStars)] = true;
                   }
                   for each(var m in mods)
                   {
                      if(checklist[m] == true)
                      {
-                        this.log("Don't skip: Legendary mod in the checklist " + m);
+                        this.log("Don\'t skip: Legendary mod in the checklist " + m);
                         return;
                      }
                   }
                }
-
                if(legCfg.HasLearnableMods && learnable.length > 0)
                {
                   this.log("Skip: Has learnable mod");
@@ -307,12 +300,10 @@ package
                   }
                   return;
                }
-
-               // To keep the conditional simple, just use a low impossible star count if not defined.
-               var skipStarCountMin:int = legCfg.IfBelowStarCount || -100;
+               var skipStarCountMin:int = int(int(legCfg.IfBelowStarCount) || -100);
                if(numStars < skipStarCountMin)
                {
-                  this.log("Skip: Star count smaller than config")
+                  this.log("Skip: Star count smaller than config");
                   if(!this.config.testRun)
                   {
                      this.onAcceptButton();
@@ -382,33 +373,30 @@ package
       {
          return this.ConfirmQuestion_mc.ConfirmQuestion_tf.text;
       }
-
+      
       private function get subtitle() : String
       {
          return this.ConfirmSubtitle_mc.ConfirmSubtitle_tf.text;
       }
-
-      private function normalizeModName(s: String, modStar: RegExp) : String
+      
+      private function normalizeModName(s:String, modStar:RegExp) : String
       {
-         s = s.replace(SYMBOLS, "");
-         return s.replace(modStar, "").toLowerCase();
+         return s.replace(SYMBOLS,"").replace(modStar,"").toLowerCase();
       }
-
-      // From an component entry, parse out legendary mod names.
-      private function parseMods(entry: ConfirmPanelComponentSourceEntry, modStar: RegExp) : Vector.<String>
+      
+      private function parseMods(entry:ConfirmPanelComponentSourceEntry, modStar:RegExp) : Vector.<String>
       {
-         var x: Vector.<String> = new Vector.<String>();
+         var x:Vector.<String> = new Vector.<String>();
          for each(var c in entry.componentNames)
          {
-            if (c.search(modStar) == -1)
+            if(c.search(modStar) != -1)
             {
-               continue;
+               x.push(normalizeModName(c,modStar));
             }
-            x.push(normalizeModName(c, modStar));
          }
          return x;
       }
-
+      
       public function Clear() : *
       {
          var _loc2_:DisplayObject = null;

@@ -180,16 +180,19 @@ package
             _loc3_++;
          }
       }
-
+      
       public function get componentNames() : Vector.<String>
       {
-         var x = new Vector.<String>();
-         for (var i = 0; i < this.EntriesA.length; ++i) {
+         var x:* = new Vector.<String>();
+         var i:* = 0;
+         while(i < this.EntriesA.length)
+         {
             x.push((this.EntriesA[i] as ConfirmPanelComponentEntry).componentName);
+            i++;
          }
          return x;
       }
-
+      
       public function UpdateText() : *
       {
          var _loc1_:* = null;
