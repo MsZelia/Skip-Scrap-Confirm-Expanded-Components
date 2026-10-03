@@ -386,9 +386,7 @@ package
 
       private function normalizeModName(s: String, modStar: RegExp) : String
       {
-         while (s.search(SYMBOLS) != -1) {
-            s = s.replace(SYMBOLS, "");
-         }
+         s = s.replace(SYMBOLS, "");
          return s.replace(modStar, "").toLowerCase();
       }
 
