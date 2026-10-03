@@ -275,8 +275,16 @@ package
                {
                   this.log("Learnable: " + learnable.join(", "));
                }
-               if(legCfg.Checklist)
+               if(legCfg.Checklist || legCfg.DontSkipMods)
                {
+                  if(!legCfg.Checklist)
+                  {
+                     legCfg.Checklist = legCfg.DontSkipMods;
+                  }
+                  else if(legCfg.DontSkipMods)
+                  {
+                     legCfg.Checklist = legCfg.Checklist.concat(legCfg.DontSkipMods);
+                  }
                   var checklist:Dictionary = new Dictionary();
                   for each(var n in legCfg.Checklist)
                   {
