@@ -19,6 +19,7 @@ package
    {
       
       private static const LOCKED_REPAIR_FAILURE_MESSAGE:String = "$CannotCraftMaterialsLocked";
+      private static const SYMBOLS:RegExp = /[.'-]+/g;
       
       public var ButtonHintBar_mc:BSButtonHintBar;
       
@@ -210,26 +211,113 @@ package
          }
          var dummy:TextField = new TextField();
          dummy.text = "$LegendaryModGlyph";
+         var uniqueGlyph:TextField = new TextField();
+         uniqueGlyph.text = "$UniqueModGlyph";
          if(this.headerText == "$SCRAPTHISITEM")
          {
-            if(this.config.SkipScrapComponentsView && this.config.SkipScrapComponentsView.Enabled)
+            var componentsCfg:Object = this.config.SkipScrapComponentsView;
+            if(componentsCfg && componentsCfg.Enabled)
             {
                this.log("Components view");
-               if(this.ConfirmSubtitle_mc.ConfirmSubtitle_tf.text.indexOf(dummy.text) == -1)
+               var parts:Array = this.subtitle.split(dummy.text);
+               var isUnique:Boolean = this.subtitle.indexOf(uniqueGlyph.text) != -1;
+               var numStars:int = parts.length - 1;
+               if(numStars == 0)
                {
                   this.log("Non-legendary item");
-                  if(this.config.SkipScrapComponentsView.NonLegendary && !this.config.testRun)
+                  if(componentsCfg.NonLegendary && !this.config.testRun)
                   {
                      this.onAcceptButton();
+                  }
+                  return;
+               }
+
+               // At this point we're dealing with a legendary item.
+               this.log("Legendary item");
+               // No-op. To slightly cleanup branch nesting and conditionals.
+               if(!componentsCfg.Legendary)
+               {
+                  return;
+               }
+
+               var legCfg:Object = componentsCfg.Legendaries;
+               if(legCfg == null)
+               {
+                  if(!this.config.testRun)
+                  {
+                     this.onAcceptButton();
+                  }
+                  return;
+               }
+
+               if(legCfg.DontSkipNamedItems && isUnique)
+               {
+                  this.log("Don't skip: Named legendary item");
+                  return;
+               }
+
+               var chanceToGet:TextField = new TextField();
+               chanceToGet.text = "$ChanceToGet";
+               var chanceToLearn:TextField = new TextField();
+               chanceToLearn.text = "$ChanceToLearn";
+               var modStars:RegExp = new RegExp("^" + dummy.text + "*\\s*");
+               var learnable:Vector.<String> = new Vector.<String>();
+               var mods:Vector.<String> = new Vector.<String>();
+               for each(var e in this.m_Entries)
+               {
+                  if(e.itemName == chanceToGet.text)
+                  {
+                     mods = parseMods(e, modStars);
+                  }
+                  if(e.itemName == chanceToLearn.text)
+                  {
+                     learnable = parseMods(e, modStars);
                   }
                }
-               else
+               this.log("Num Stars: " + numStars + ", Unique: " + isUnique);
+               this.log("Mods: " + mods.join(", "));
+               if(learnable.length > 0)
                {
-                  this.log("Legendary item");
-                  if(this.config.SkipScrapComponentsView.Legendary && !this.config.testRun)
+                  this.log("Learnable: " + learnable.join(", "));
+               }
+
+               if(legCfg.Checklist)
+               {
+                  var checklist:Dictionary = new Dictionary();
+                  for each(var n in legCfg.Checklist)
+                  {
+                     checklist[normalizeModName(n, modStars)] = true;
+                  }
+                  for each(var m in mods)
+                  {
+                     if(checklist[m] == true)
+                     {
+                        this.log("Don't skip: Legendary mod in the checklist " + m);
+                        return;
+                     }
+                  }
+               }
+
+               if(legCfg.HasLearnableMods && learnable.length > 0)
+               {
+                  this.log("Skip: Has learnable mod");
+                  if(!this.config.testRun)
                   {
                      this.onAcceptButton();
                   }
+                  return;
+               }
+
+               // To keep the conditional simple, just use a low impossible star count if not defined.
+               var skipStarCountMin:int = legCfg.IfBelowStarCount || -100;
+               if(numStars < skipStarCountMin)
+               {
+                  this.log("Skip: Star count smaller than config")
+                  if(!this.config.testRun)
+                  {
+                     this.onAcceptButton();
+                  }
+                  return;
                }
             }
             else
@@ -294,7 +382,33 @@ package
       {
          return this.ConfirmQuestion_mc.ConfirmQuestion_tf.text;
       }
-      
+
+      private function get subtitle() : String
+      {
+         return this.ConfirmSubtitle_mc.ConfirmSubtitle_tf.text;
+      }
+
+      private function normalizeModName(s: String, modStar: RegExp) : String
+      {
+         s = s.replace(SYMBOLS, "");
+         return s.replace(modStar, "").toLowerCase();
+      }
+
+      // From an component entry, parse out legendary mod names.
+      private function parseMods(entry: ConfirmPanelComponentSourceEntry, modStar: RegExp) : Vector.<String>
+      {
+         var x: Vector.<String> = new Vector.<String>();
+         for each(var c in entry.componentNames)
+         {
+            if (c.search(modStar) == -1)
+            {
+               continue;
+            }
+            x.push(normalizeModName(c, modStar));
+         }
+         return x;
+      }
+
       public function Clear() : *
       {
          var _loc2_:DisplayObject = null;

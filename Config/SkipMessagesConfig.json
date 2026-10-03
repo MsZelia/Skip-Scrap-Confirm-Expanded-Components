@@ -6,7 +6,30 @@
 	"SkipScrapComponentsView": {
 		"Enabled": false,
 		"Legendary": true,
-		"NonLegendary": true
+		"NonLegendary": true,
+
+		// This is optional. The options here only take effect if the Legendary setting above is true.
+		"Legendaries": {
+			// All fields are optional too.
+			// Options are ordered by descending precedence. A match in an earlier option will trigger
+			// that behavior and skip the remaining options.
+			// Note: This doesn't mean reordering your config changes precedence. Just that the example
+			// as-written also describes the precedence.
+
+			// Don't skip the components view for named legendary items, which have named unique effects.
+			//"DontSkipNamedItems": true,
+
+			// Don't skip the components view if a legendary has any of these mods.
+			// Can be useful if you want to double check an item for possibly up-rolling to better gear.
+			// Matches are case-insensitive and ignore symbols like apostrophes and periods.
+			// "Checklist": [ "Furious", "Pin-Pointer's", "Pounder's" ],
+
+			// Skip if the item has learnable legendary mods (this ignores mods like normal weapon/armor mods).
+			// "HasLearnableMods": true,
+
+			// Skip the components view if the legendary has less than this many stars.
+			// "IfBelowStarCount": 3
+		}
 	},
 	
 	"AutoUseRepairKit": true,
