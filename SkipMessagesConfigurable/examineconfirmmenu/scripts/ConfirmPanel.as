@@ -275,7 +275,11 @@ package
                   }
                }
                this.log("Num Stars: " + numStars + ", Unique: " + isUnique);
-               this.log("Mods: " + mods.join(", ") + ", Learnable: " + learnable.join(", "));
+               this.log("Mods: " + mods.join(", "));
+               if(learnable.length > 0)
+               {
+                  this.log("Learnable: " + learnable.join(", "));
+               }
 
                if(legCfg.Checklist)
                {
