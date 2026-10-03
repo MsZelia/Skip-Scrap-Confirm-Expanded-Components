@@ -17,18 +17,18 @@
 			// as-written also describes the precedence.
 
 			// Don't skip the components view for named legendary items, which have named unique effects.
-			//"DontSkipNamedItems": true,
+			"DontSkipNamedItems": true,
 
 			// Don't skip the components view if a legendary has any of these mods.
 			// Can be useful if you want to double check an item for possibly up-rolling to better gear.
 			// Matches are case-insensitive and ignore symbols like apostrophes and periods.
-			// "Checklist": [ "Furious", "Pin-Pointer's", "Pounder's" ],
+			// "DontSkipMods": [ "Furious", "Pin-Pointer's", "Pounder's" ],
 
 			// Skip if the item has learnable legendary mods (this ignores mods like normal weapon/armor mods).
 			// "HasLearnableMods": true,
 
 			// Skip the components view if the legendary has less than this many stars.
-			// "IfBelowStarCount": 3
+			// "IfBelowStarCount": 5
 		}
 	},
 	
@@ -38,22 +38,33 @@
 	
 	"SkipCustom": {
 		
-		// Few examples:
+		// Examples:
 		// "By performing this action, you will leave your current team. Leave your team?": 0,
 		// "$Loaded_Into_Nuke_Zone": 0,
 		// "Exit Station?": 1,
-		".....":0
+		
+		// Skip fallout 1st popups for scrap/ammo/aid box:
+		"$LimitedTypeStorageError_AidTransferTo": 1,
+		"$LimitedTypeStorageError_AmmoTransferTo": 1,
+		"$LimitedTypeStorageError_ScrapTransferTo": 1,
 	},
 	"SkipCustomRegex": {
 		
-		// Few examples:
-		// "Pay [0-9]{1,2} Caps to travel": 0
-		// "Choose a travel point for": 1
+		// Examples:
+		// Skip fast travel popup under 100 caps:
+		// "Pay [0-9]{1,2} Caps to travel": 0,
+		
+		// Scrap perk cards:
+		// "Do you want to scrap this card for \\d+ Perk Coins?": 0,
+		
+		// Auto claim rewards from season:
+		// "Are you sure you want to claim .+ for \\d+ Tickets?": 0,
 	},
 	
 	"ChangeSelection": {
 		
-		// Example:
-		// "Choose a travel point for Highway Town": 2
+		// Examples:
+		// "Choose a travel point for Highway Town": 2,
+		// "Choose a travel point for The Rusty Pick": 1,
 	}
 }
