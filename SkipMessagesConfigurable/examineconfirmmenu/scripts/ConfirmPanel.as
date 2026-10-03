@@ -19,7 +19,7 @@ package
    {
       
       private static const LOCKED_REPAIR_FAILURE_MESSAGE:String = "$CannotCraftMaterialsLocked";
-      private static const SYMBOLS:RegExp = new RegExp(/[.'-]+/);
+      private static const SYMBOLS:RegExp = /[.'-]+/g;
       
       public var ButtonHintBar_mc:BSButtonHintBar;
       
