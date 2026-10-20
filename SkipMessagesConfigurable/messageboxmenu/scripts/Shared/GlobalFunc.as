@@ -42,7 +42,7 @@ package Shared
       
       protected static const CLOSE_ENOUGH_EPSILON:Number = 0.001;
       
-      public static const MAX_TRUNCATED_TEXT_LENGTH:* = 42;
+      public static const MAX_TRUNCATED_TEXT_LENGTH:int = 42;
       
       public static const PLAY_FOCUS_SOUND:String = "GlobalFunc::playFocusSound";
       
@@ -1618,27 +1618,32 @@ package Shared
          return _loc3_;
       }
       
-      public static function BuildLegendaryStarsGlyphString(param1:Object) : String
+      public static function BuildStarsGlyphString(param1:Object) : String
       {
-         var _loc5_:* = undefined;
-         var _loc6_:TextField = null;
+         var _loc5_:String = null;
+         var _loc6_:* = undefined;
          var _loc2_:Boolean = false;
          var _loc3_:Number = 0;
          var _loc4_:String = "";
-         if(param1 != null && Boolean(param1.hasOwnProperty("isLegendary")))
+         if(param1 != null)
          {
-            _loc2_ = Boolean(param1.isLegendary);
-            if(_loc2_ && Boolean(param1.hasOwnProperty("numLegendaryStars")))
+            if(param1.hasOwnProperty("isLegendary") && param1.hasOwnProperty("numLegendaryStars") && param1.isLegendary && param1.numLegendaryStars > 0)
             {
+               _loc5_ = LocalizeFormattedString("$LegendaryModGlyph");
                _loc3_ = Number(param1.numLegendaryStars);
-               _loc5_ = 0;
-               while(_loc5_ < _loc3_)
+               _loc6_ = 0;
+               while(_loc6_ < _loc3_)
                {
-                  _loc6_ = new TextField();
-                  _loc6_.text = "$LegendaryModGlyph";
-                  _loc4_ += _loc6_.text;
-                  _loc5_++;
+                  _loc4_ += _loc5_;
+                  _loc6_++;
                }
+            }
+            if(Boolean(param1.hasOwnProperty("hasUniqueEffect")) && Boolean(param1.hasUniqueEffect))
+            {
+               _loc4_ += LocalizeFormattedString("$UniqueModGlyph");
+            }
+            if(_loc4_.length > 0)
+            {
                _loc4_ = " " + _loc4_;
             }
          }
